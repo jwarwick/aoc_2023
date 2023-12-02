@@ -1,4 +1,4 @@
-set(DAY "day11")
+set(DAY "day01")
 
 add_executable("${DAY}" main.cpp solution.cpp)
 target_link_libraries("${DAY}" LINK_PUBLIC common)

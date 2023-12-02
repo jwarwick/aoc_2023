@@ -4,10 +4,12 @@
 class Solution {
   public:
     Solution(std::vector<std::string>);
-    void part1();
-    void part2();
+    int part1();
+    int part2();
 
+    int rowValue(std::string row);
+    int rowValue2(std::string row);
+    std::string replaceWords(std::string row);
   private:
     std::vector<std::string> input;
-
 };
