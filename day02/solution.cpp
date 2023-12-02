@@ -4,6 +4,7 @@
 #include <iostream>
 #include <regex>
 #include <cassert>
+#include <algorithm>
 
 constexpr auto MAX_RED = 12;
 constexpr auto MAX_GREEN = 13;
@@ -70,6 +71,18 @@ class Game {
       return true;
     }
 
+    int power() {
+      int max_red{0};
+      int max_green{0};
+      int max_blue{0};
+      for (auto d : draws) {
+        max_red = std::max(max_red, d.red);
+        max_green = std::max(max_green, d.green);
+        max_blue = std::max(max_blue, d.blue);
+      }
+      return max_red * max_green * max_blue;
+    }
+
     int number;
     std::vector<Draw> draws;
 };
@@ -89,6 +102,7 @@ TEST_CASE("game") {
   CHECK(g.draws[2].green == 2);
   CHECK(g.draws[2].blue == 0);
   CHECK(g.isValid() == true);
+  CHECK(g.power() == 48);
 }
 
 Solution::Solution(std::vector<std::string> input) : input(input) {
@@ -124,6 +138,26 @@ TEST_CASE("part 1 example") {
 
 int Solution::part2()
 {
+  std::vector<Game> games;
+  for (auto s : input) {
+    games.emplace_back(Game(s));
+  }
   int total{0};
+  for (auto g: games) {
+    total += g.power();
+  }
+  std::cout << "Part 2: " << total << std::endl;
   return total;
+}
+
+TEST_CASE("part 2 example") {
+  std::vector<std::string> v{
+    "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+      "Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+      "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+      "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+      "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"
+  };
+  Solution s(v);
+  CHECK(s.part2() == 2286);
 }
